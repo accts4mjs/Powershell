@@ -1,0 +1,28 @@
+Order,Issue key,Issue Type,Summary,Assignee,Priority,Description,Reporter,,
+1,,Sub-task,Deploy all client release build to integration,gcattin,Must,"These steps are now part of the Int01 automation that runs the weekend following the close of the last sprint of a release:
+# Create the release branch that will host the release build and deployment.
+# Stop the VisitPayProcessor for each client in integration (Int01/02)
+# Purge the Rabbit queues for each client in integration (Int01-02)
+# Refresh Int01/Int02 DBs with production before deploying new release for regression.
+# Once Int01/02 have been refreshed, deploy production packages into Int01/02 so as to have a clean starting point prior to deploying the actual release build into Int01/02. Do this for all involved clients.
+# Create release packages
+# Deploy release packages
+
+*The action remaining to take in this card is to note which release build is currently in int01 for that release. Note each build deployed so it also serves as a history to know what has been deployed.*",gcattin,,Copy as is
+2,,Sub-task,Validate automated deployment to int01,gcattin,Must,"Make sure that you can access all int01 sites following an automated deployment:
+1. Check that the deployment log is error free, and in particular that the DB restores completed successfully for each client. 
+2. Able to load the login page (all internal accesses in place) for each client and patient portals.
+3. Able to login to each client portal and do a quick function tour ",gcattin,,Save for update later
+3,,Sub-task,Deploy release build to Training environment for all clients,gcattin,Won't,"By default this is done via the automation, but it has been commented out for now due to the desire to control what goes to training when. Now that we deploy more often, it is easy to trample on a client training session, thus this separate card.
+
+Talk to Tani or Jack to determine when it is appropriate to deploy the release build to training. Make sure to include QATools. You may need to be added to the approver's role for Training and demo to deploy there. If you have to approve each package deployment first step, remember to assign the approval to yourself (right hand side of the yellow box) then deploy.",gcattin,,Reset to initial state
+4,,Sub-task,------ Prerequisite Client-specific Gates ------,,Won't,,gcattin,,Reporter: gcattin
+5,,Sub-task,Validate that Methodist settings match client expectation,awear,Must,Int02 - validated. Looks good.,gcattin,,
+6,,Sub-task,-------- PreProd --------,,Won't,,gcattin,,
+7,,Sub-task,Create and approve Change Request to deploy all client release packages to PreProd,lpenney,Must,"Create a Change Request ticket to approve a release build in Preprod. Note Change Request (for deployments, system changes, etc.) is under https://ivincehealth.sharepoint.com/sites/ivcompliance/_layouts/15/start.aspx#/SitePages/Change%20Requests.aspx
+
+
+Change request 
+
+
+",gcattin,,

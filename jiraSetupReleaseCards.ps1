@@ -61,7 +61,8 @@ class JSRC {
         [string]$project,
         [string]$cardType,
         [string]$reporter,
-        [string]$childFile
+        [string]$childFile,
+        [string]$reporter
     ) {
         if ((Test-Path -Path $childFile -PathTYpe leaf) -ne $true) {
             Write-Error "childFile param '$childFile' is an invalid file"
@@ -94,7 +95,8 @@ class JSRC {
         if ($updatedFile -eq $childFile) {
             $updatedFile = "$($updatedFile).updated.csv"
         }
-        $childCSV | Export-Csv -LiteralPath $updatedFile
+        # Add the Unassign column to the file
+        $childCSV | Select-Object *, "Unassign" | Export-Csv -LiteralPath $updatedFile
         Write-Host "Updated CSV file = '$updatedFile'"
     }
 
@@ -139,12 +141,13 @@ class JSRC {
 Function JSRC-SetupReleaseCards(
         [parameter(Mandatory=$true)][string]$Summary,
         [parameter(Mandatory=$true)][string]$Description,
-        [parameter(Mandatory=$true)][string]$ChildFilePath
+        [parameter(Mandatory=$true)][string]$ChildFilePath,
+        [parameter(Mandatory=$false)][string]$reporter
 ) {
     $STARTTIME = Get-date
 
     $cardMaker = [JSRC]::new()
-    $cardMaker.CreateReleaseCards($Summary, $Description, "RM", "Task", "gcattin", $ChildFilePath)
+    $cardMaker.CreateReleaseCards($Summary, $Description, "RM", "Task", "gcattin", $ChildFilePath, $reporter)
     $cardMaker.CloseJiraConnection()
 
     $ENDTIME = Get-Date

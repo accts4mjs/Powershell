@@ -1,0 +1,346 @@
+Order,Issue key,Issue Type,Summary,Assignee,Priority,Status,Description,Reporter,,
+1,,Sub-task,Deploy all client release build to integration,gcattin,Must,Done,"These steps are now part of the Int01 automation that runs the weekend following the close of the last sprint of a release:
+# Create the release branch that will host the release build and deployment.
+# Stop the VisitPayProcessor for each client in integration (Int01/02)
+# Purge the Rabbit queues for each client in integration (Int01-02)
+# Refresh Int01/Int02 DBs with production before deploying new release for regression.
+# Once Int01/02 have been refreshed, deploy production packages into Int01/02 so as to have a clean starting point prior to deploying the actual release build into Int01/02. Do this for all involved clients.
+# Create release packages
+# Deploy release packages
+
+*The action remaining to take in this card is to note which release build is currently in int01 for that release. Note each build deployed so it also serves as a history to know what has been deployed.*",gcattin,,Copy as is
+2,,Sub-task,Validate automated deployment to int01,gcattin,Must,Done,"Make sure that you can access all int01 sites following an automated deployment:
+1. Check that the deployment log is error free, and in particular that the DB restores completed successfully for each client. 
+2. Able to load the login page (all internal accesses in place) for each client and patient portals.
+3. Able to login to each client portal and do a quick function tour ",gcattin,,Save for update later
+3,,Sub-task,Deploy release build to Training environment for all clients,gcattin,Won't,Done,"By default this is done via the automation, but it has been commented out for now due to the desire to control what goes to training when. Now that we deploy more often, it is easy to trample on a client training session, thus this separate card.
+
+Talk to Tani or Jack to determine when it is appropriate to deploy the release build to training. Make sure to include QATools. You may need to be added to the approver's role for Training and demo to deploy there. If you have to approve each package deployment first step, remember to assign the approval to yourself (right hand side of the yellow box) then deploy.",gcattin,,Reset to initial state
+4,,Sub-task,PreProd gate: QA Manager card to sign off on all Jira cards to be part of this release,smackey,Must,Done,"The QA Manager needs to sign-off on all JIRA cards expected to be part of the release 
+	Intent: testing is complete and card CLOSED prior to PreProd deploy 
+	Exception: If card can be tested only in PreProd, this must be called out and accounted for in a publishable test plan; (if testing can only occur in Integration – this will be noted in test plan). If a Jira card needs to be tested in PreProd/Prod, add that as a prefix the card summary, e.g (PreProd testing) [Summary] 
+	As part of QA Manager responsibilities:
+•	Determine for each card the extent of the required testing
+•	Determine the mechanism by which test tracking will occur (above links share Legacy mechanism)
+•	Document the testing that will occur
+o	Assign who will be testing
+	This will typically be a QA team member or a DQM member; for facilitating SLHS testing, this might be a Prod Support member
+o	State where testing will occur
+o	State the scope of testing that will occur
+o	Get testing estimates (we didn’t actually say this in meeting – but adding now)
+•	Intent: Ensure every change has  quality touch (i.e., help us avoid self-testing scripts/fixes, moving to next stage of deploy without tested cards/test plans in place)
+
+",gcattin,,"Custom logic (e.g. Priority = ignore ""Won't"" unless header card)"
+5,,Sub-task,PreProd gate: DQM Manager to sign off on all Jira cards to be part of the deployment where DQM is Test Lead,dyoungberg,Must,Done,"DQM Manager to sign off on all cards where DQM is “test lead” 
+
+Be sure to coordinate with QA Manager for purposes of tracking a test plan esp. if QA Manager is go/no-go stakeholder
+
+For the cards that fall under the DQM Manager sign-off,  needs to sign-off on all JIRA cards expected to be part of the HotFix/Patch
+ Intent: testing is complete and card CLOSED prior to PreProd deploy
+ Exception: If card can be tested only in PreProd, this must be called out and accounted for in a publishable test plan; (if testing can only occur in Integration – this will be noted in test plan). If a Jira card needs to be tested in PreProd/Prod, add that as a prefix the card summary, e.g. (PreProd testing) [Summary]
+ Scope of responsibilities:
+• Determine for each card the extent of the required testing
+• Determine the mechanism by which test tracking will occur (above links share Legacy mechanism)
+• Document the testing that will occur
+o Assign who will be testing
+ This will typically be a QA team member or a DQM member; for facilitating SLHS testing, this might be a Prod Support member
+o State where testing will occur
+o State the scope of testing that will occur
+o Get testing estimates (we didn’t actually say this in meeting – but adding now)
+• Intent: Ensure every change has quality touch (i.e., help us avoid self-testing scripts/fixes, moving to next stage of deploy without tested cards/test plans in place)
+
+*Sample Query:*
+{code:}
+fixVersion in (""VP3 1.0"", ""VP3 1.0 - R1PNTX"",""VP3 1.05"") AND ((issuetype in (story, Enhancement, bug, Task) AND (assignee in (darnett, cmccain, GMoore, dyoungberg, dnicolay, jbusick, jhunn)) OR ""Test Lead"" in (darnett, cmccain, GMoore, dyoungberg, dnicolay, jbusick, jhunn) OR ""Test Lead"" is EMPTY) AND priority != ""Won't"") and project != VP3
+{code}
+",gcattin,,
+6,,Sub-task,PreProd gate: Scoring Manager to sign off on all work done in Octopus,ijohnston,Must,Done,Review and sign off all development/configuration work done for scoring is ready to go to preprod.,gcattin,,Initial State Field: Value
+7,,Sub-task,PreProd gate: DevOps Manager to sign off on all work done in Octopus,apalermo,Must,Done,"Review and sign off all development/configuration work done in Octopus, especially as it pertains to PreProd, Prod, and Support.
+
+Make sure to review the changes made by ChrisM, Scar and Nathan.",gcattin,,Status: To Do
+8,,Sub-task,------ Prerequisite Client-specific Gates ------,,Won't,Done,0,gcattin,,Reporter: gcattin
+9,,Sub-task,Validate that SLHS settings match client expectation,awear,Won't,Done,0,gcattin,,Issue Type: Sub-task
+10,,Sub-task,Prerequisite gate: DQM to successfully run the SLHS inbound and outbound processes of the release package in a lower lane environment (preferably Integration),GMoore,Won't,Done,0,gcattin,,
+11,,Sub-task,Validate that IMH settings match client expectation,awear,Won't,Done,Int02 - validated. Looks good.,gcattin,,
+12,,Sub-task,Prerequisite gate: DQM to successfully run the IMH inbound and outbound processes of the release package in a lower lane environment (preferably Integration),GMoore,Won't,Done,0,gcattin,,
+13,,Sub-task,Validate that Methodist settings match client expectation,awear,Must,Done,Int02 - validated. Looks good.,gcattin,,
+14,,Sub-task,Prerequisite gate: DQM to successfully run the Methodist inbound and outbound processes of the release package in a lower lane environment (preferably Integration),jbusick,Must,Done,0,gcattin,,
+15,,Sub-task,-------- PreProd --------,,Won't,Done,0,gcattin,,
+16,,Sub-task,Create and approve Change Request to deploy all client release packages to PreProd,lpenney,Must,Done,"Create a Change Request ticket to approve a release build in Preprod. Note Change Request (for deployments, system changes, etc.) is under https://ivincehealth.sharepoint.com/sites/ivcompliance/_layouts/15/start.aspx#/SitePages/Change%20Requests.aspx
+
+
+Change request 
+
+
+",gcattin,,
+17,,Sub-task,Create-launch-approve-deploy Octopus deployment packages for all clients in PreProd,gcattin,Must,Done,"Go to Octopus and create a deployment package for the PreProd environment for the desired client. If the preprod environment for the given client is not listed, it means that the release package was not deployed to a lower lane first, which likely also means that the gates, likely the DQM or QA gates are not complete.",gcattin,,
+18,,Sub-task,Validate all clients pre-production monitoring pages for client and patient portals,gcattin,Must,Done,"Validate that the client/patient monitoring portals work for each client:
+
+SLHS
+https://admin-preprod01-stlukes.visitpaytest.com/Monitoring?authenticationToken=258ed98ee4bb4f78be3fa9df18112097
+https://www-preprod01-stlukes.visitpaytest.com/Monitoring?authenticationToken=258ed98ee4bb4f78be3fa9df18112097
+
+
+IMH
+https://www-preprod01-intermountain.visitpaytest.com/Monitoring?authenticationToken=258ed98ee4bb4f78be3fa9df18112097
+https://admin-preprod01-intermountain.visitpaytest.com/Monitoring?authenticationToken=258ed98ee4bb4f78be3fa9df18112097
+
+Providence
+https://www-preprod01-providence.visitpaytest.com/Monitoring?authenticationToken=258ed98ee4bb4f78be3fa9df18112097
+https://admin-preprod01-providence.visitpaytest.com/Monitoring?authenticationToken=258ed98ee4bb4f78be3fa9df18112097  
+
+Inova
+https://www-preprod01-inova.visitpaytest.com/Monitoring?authenticationToken=258ed98ee4bb4f78be3fa9df18112097
+https://admin-preprod01-inova.visitpaytest.com/Monitoring?authenticationToken=258ed98ee4bb4f78be3fa9df18112097  
+
+Methodist
+https://www-preprod01-methodist.visitpaytest.com/Monitoring?authenticationToken=258ed98ee4bb4f78be3fa9df18112097
+https://admin-preprod01-methodist.visitpaytest.com/Monitoring?authenticationToken=258ed98ee4bb4f78be3fa9df18112097
+",gcattin,,
+19,,Sub-task,Validate that all client settings match client expectation in preprod,awear,Must,Done,"validated
+
+Client Settings Spreadsheet:  https://ivincehealth.sharepoint.com/:x:/r/Products/vpp/_layouts/15/WopiFrame2.aspx?sourcedoc=%7BDDA57139-FB89-44D0-BA3E-0E87AC91106B%7D&file=AR_ClientConfigurationValues.xlsx&action=default",gcattin,,
+20,,Sub-task,Test PreProd for VPNG SLHS Testing Release,gcattin,Won't,Done,"Specify what testing will be done in Preprod 
+
+Smoke testing card: https://ivinci.atlassian.net/browse/QA-776",gcattin,,
+21,,Sub-task,Test PreProd for VPNG IMH Testing Release,tintu.johny,Won't,Done,"Specify what testing will be done in Preprod 
+
+Smoke testing card: https://ivinci.atlassian.net/browse/QA-776",gcattin,,
+22,,Sub-task,Test PreProd for VPNG Methodist Testing Release,dbosley,Must,Done,"Specify what testing will be done in Preprod 
+
+Smoke testing card: https://ivinci.atlassian.net/browse/QA-776",gcattin,,
+23,,Sub-task,Test PreProd for VPNG Methodist *SCORING* Release,mthurston,Won't,Done,"* Scoring will run if inbound is run
+
+* Validate:
+** make sure scores are being generated
+** segmentation output is there",gcattin,,
+24,,Sub-task,Test PreProd for R1SVIN (Indy) *SCORING* Release,mthurston,Must,Done,"* Scoring will run if inbound is run
+
+* Validate:
+** make sure scores are being generated
+** segmentation output is there",gcattin,,
+25,,Sub-task,Prod gate signoff: Perform PreProd processes checks for all clients,chundley,Must,Done,"Run the processes to complete the 3-day baking checks. At least 2 days in preprod.
+
+Once complete, determine if it is ready for production. If it is, signoff by saying ""Build x.y.z.xxx is signed off to go to production"". Provide a Sign off for each client. ",gcattin,,
+26,,Sub-task,Face-to-Face Go-NoGo meeeting to deploy to Production,gcattin,Must,Done,"Assess that all prerequisite gate keepers (Dev mgr code reviews, DMQ Mgr, QA Mgr, DevOps Mgr, RM) have signed off on their gate(s) and approve going to production.
+
+Make sure that client services (Bini/Ron/ChrisM), Dan, Mark and Leslie are a go for Production.
+
+Note each meeting that takes place, as you may have different go/nogo for given clients or that it takes more than one for a given client if there are issues to solve.
+",gcattin,,
+27,,Sub-task,Turn on tentacles in production,apalermo,Must,Done,0,gcattin,,
+28,,Sub-task,------------------St Lukes Production ---------------,,Won't,Done,0,gcattin,,
+29,,Sub-task,Request and approve change request to deploy build into SLHS Prod,lpenney,Won't,Done,"Create a Change Request ticket to approve a release build in Preprod. Note Change Request (for deployments, system changes, etc.) is under https://ivincehealth.sharepoint.com/sites/ivcompliance/_layouts/15/start.aspx#/SitePages/Change%20Requests.aspx
+Then, pass the ticket to Leslie (or his next appointee - MikeS, DanL or Mark) for Approval. When he has approved it, close this subtask.
+
+",gcattin,,
+30,,Sub-task,"Create, launch and approve Octopus deployment packages for SLHS Production",jkuhn,Won't,Done,"Go to Octopus and create a deployment package for the Prod environment for the desired client. If the prod environment for the given client is not listed, it means that the release package was not deployed to a lower lane first, which likely also means that the gates, likely the DQM or QA gates are not complete.
+
+",gcattin,,
+31,,Sub-task,Perform SLHS Prod deployment for VPNG release,jkuhn,Won't,Done,"Once the approval process is complete, run the deployment process as outlined in the spreadsheet.
+
+..below is the package deployment order we all agreed upon.
+
+ !screenshot-1.png|thumbnail! 
+
+
+There are a couple of guidelines to that IT needs to keep in mind as we do these manual deploys:
+
+1.	Items with the same number can run concurrently, i.e. for items numbered 3, the Multi packages can all be launched together.
+2.	All items in a grouping need to finish before the next starts.  For example all 3 (Multi) packages must be complete before the item 4 (Settings) packages can be launched.
+
+Please let me know if I missed anything or if corrections are needed.
+
+Thanks,
+Leslie
+
+
+Leslie Penney | iVinci Health LLC | Senior Manager, Information Technology
+lpenney@ivincihealth.com | O: 208.343.5035 | M: 208.870.7726",gcattin,,
+32,,Sub-task,Validate production monitoring pages for SLHS client and patient portals,jkuhn,Won't,Done,"SLHS
+Validate that the Prod client portal monitoring page works https://admin.stlukesbillpay.com/Monitoring/?authenticationToken=49c78bf3cc44dcd02c5417a90277f9d3
+Validate that the Prod patient portal monitoring page works https://www.stlukesbillpay.com/Monitoring/?authenticationToken=49c78bf3cc44dcd02c5417a90277f9d3
+
+IMH
+Validate that the Prod client portal monitoring page works https://admin.intermountainbillpay.com/Monitoring?authenticationToken=c3794890c6d343d391f21aeb10d05a00 
+Validate that the Prod patient portal monitoring page works https://www.intermountainbillpay.com/Monitoring?authenticationToken=c3794890c6d343d391f21aeb10d05a00 ",gcattin,,
+33,,Sub-task,Test SLHS Production,dbosley,Won't,Done,"Going forward I would like to add the step of doing smoke testing in prod using test accounts.  To be PCI compliant the accounts used would need to be disabled on system go-live.  The trick would be that they would need to be tied to non-existent client data and not produce outbound data.  
+
+Chris, please add a story to Intermountain Alpha backlog for this task.  It will require coordination between Dev, QA, and DQM to enable.  My thought would be to insert test accounts at the BT or APP, process to OB events, but not put into the OB file.  This would most likely require tracking any data/events as associated with a test acct.
+
+For releases and hotfixes, our final step before go-live is a smoke test on each system utilizing these test accounts.
+
+Mark Lythgoe | iVinci Health | CTO | 208.489.8993
+",gcattin,,
+34,,Sub-task,--------------- Intermountain Production --------------,,Won't,Done,0,gcattin,,
+35,,Sub-task,Request and approve change request to deploy build into IMH Prod,lpenney,Won't,Done,"Create a Change Request ticket to approve a release build in Preprod. Note Change Request (for deployments, system changes, etc.) is under https://ivincehealth.sharepoint.com/sites/ivcompliance/_layouts/15/start.aspx#/SitePages/Change%20Requests.aspx
+Then, pass the ticket to Leslie (or his next appointee - MikeS, DanL or  Mark) for Approval. When he has approved it, close this subtask.
+
+The Change Request for Production deployment is in the comments.",gcattin,,
+36,,Sub-task,"Create, launch and approve Octopus deployment packages for IHM Production",jkuhn,Won't,Done,"Go to Octopus and create a deployment package for the Prod environment for the desired client. If the prod environment for the given client is not listed, it means that the release package was not deployed to a lower lane first, which likely also means that the gates, likely the DQM or QA gates are not complete.
+
+",gcattin,,
+37,,Sub-task,Perform IMH Prod deployment for VPNG release,jkuhn,Won't,Done,"Once the approval process is complete, run the deployment process as outlined in the spreadsheet.
+
+..below is the package deployment order we all agreed upon.
+
+ !screenshot-1.png|thumbnail! 
+
+
+There are a couple of guidelines to that IT needs to keep in mind as we do these manual deploys:
+
+1.	Items with the same number can run concurrently, i.e. for items numbered 3, the Multi packages can all be launched together.
+2.	All items in a grouping need to finish before the next starts.  For example all 3 (Multi) packages must be complete before the item 4 (Settings) packages can be launched.
+
+Please let me know if I missed anything or if corrections are needed.
+
+Thanks,
+Leslie
+
+
+Leslie Penney | iVinci Health LLC | Senior Manager, Information Technology
+lpenney@ivincihealth.com | O: 208.343.5035 | M: 208.870.7726",gcattin,,
+38,,Sub-task,Validate production monitoring pages for IMH client and patient portals,jkuhn,Won't,Done,"SLHS
+Validate that the Prod client portal monitoring page works https://admin.stlukesbillpay.com/Monitoring/?authenticationToken=49c78bf3cc44dcd02c5417a90277f9d3
+Validate that the Prod patient portal monitoring page works https://www.stlukesbillpay.com/Monitoring/?authenticationToken=49c78bf3cc44dcd02c5417a90277f9d3
+
+IMH
+Validate that the Prod client portal monitoring page works https://admin.intermountainbillpay.com/Monitoring?authenticationToken=c3794890c6d343d391f21aeb10d05a00 
+Validate that the Prod patient portal monitoring page works https://www.intermountainbillpay.com/Monitoring?authenticationToken=c3794890c6d343d391f21aeb10d05a00 ",gcattin,,
+39,,Sub-task,Test IMH Production,jkuhn,Won't,Done,"Going forward I would like to add the step of doing smoke testing in prod using test accounts.  To be PCI compliant the accounts used would need to be disabled on system go-live.  The trick would be that they would need to be tied to non-existent client data and not produce outbound data.  
+
+Chris, please add a story to Intermountain Alpha backlog for this task.  It will require coordination between Dev, QA, and DQM to enable.  My thought would be to insert test accounts at the BT or APP, process to OB events, but not put into the OB file.  This would most likely require tracking any data/events as associated with a test acct.
+
+For releases and hotfixes, our final step before go-live is a smoke test on each system utilizing these test accounts.
+
+Mark Lythgoe | iVinci Health | CTO | 208.489.8993
+",gcattin,,
+40,,Sub-task,-------------------------------->>>>>Methodist Production<<<<<----------------------------------,,Won't,Done,0,gcattin,,
+41,,Sub-task,Request and approve change request to deploy build into Methodist Prod,lpenney,Must,Done,"Create a Change Request ticket to approve a release build in Preprod. Note Change Request (for deployments, system changes, etc.) is under https://ivincehealth.sharepoint.com/sites/ivcompliance/_layouts/15/start.aspx#/SitePages/Change%20Requests.aspx
+Then, pass the ticket to Leslie (or his next appointee - MikeS, DanL or Mark) for Approval. When he has approved it, close this subtask.
+
+The Change Request for Production deployment is in the comments.",gcattin,,
+42,,Sub-task,"Create, launch and approve Octopus deployment package for Methodist Production",gcattin,Must,Done,"Go to Octopus and create a deployment package for the Prod environment for the desired client. If the prod environment for the given client is not listed, it means that the release package was not deployed to a lower lane first, which likely also means that the gates, likely the DQM or QA gates are not complete.
+
+",gcattin,,
+43,,Sub-task,Perform Methodist Prod deployment for VPNG release,gcattin,Must,To Do,"Once the approval process is complete, run the deployment process as outlined in the spreadsheet.
+
+..below is the package deployment order we all agreed upon.
+
+ !screenshot-1.png|thumbnail! 
+
+
+There are a couple of guidelines to that IT needs to keep in mind as we do these manual deploys:
+
+1.	Items with the same number can run concurrently, i.e. for items numbered 3, the Multi packages can all be launched together.
+2.	All items in a grouping need to finish before the next starts.  For example all 3 (Multi) packages must be complete before the item 4 (Settings) packages can be launched.
+
+Please let me know if I missed anything or if corrections are needed.
+
+Thanks,
+Leslie
+
+
+Leslie Penney | iVinci Health LLC | Senior Manager, Information Technology
+lpenney@ivincihealth.com | O: 208.343.5035 | M: 208.870.7726",gcattin,,
+44,,Sub-task,Validate production monitoring pages for Methodist client and patient portals,gcattin,Must,To Do,"SLHS
+Validate that the Prod client portal monitoring page works https://admin.stlukesbillpay.com/Monitoring/?authenticationToken=49c78bf3cc44dcd02c5417a90277f9d3
+Validate that the Prod patient portal monitoring page works https://www.stlukesbillpay.com/Monitoring/?authenticationToken=49c78bf3cc44dcd02c5417a90277f9d3
+
+IMH
+Validate that the Prod client portal monitoring page works https://admin.intermountainbillpay.com/Monitoring?authenticationToken=c3794890c6d343d391f21aeb10d05a00 
+Validate that the Prod patient portal monitoring page works https://www.intermountainbillpay.com/Monitoring?authenticationToken=c3794890c6d343d391f21aeb10d05a00 
+
+PHS
+Validate that the Prod patient portal monitoring page works https://www.providencevisitpay.org/Monitoring?authenticationToken=d9acfcf4757e49958d6d307e1d8f6234 
+Validate that the Prod client portal monitoring page works https://admin.providencevisitpay.org/Monitoring?authenticationToken=d9acfcf4757e49958d6d307e1d8f6234 
+
+INV
+https://www.inovavisitpay.org/Monitoring?authenticationToken=6299bfbb6de2486c9a362b99240f67d6
+https://admin.inovavisitpay.org/Monitoring?authenticationToken=6299bfbb6de2486c9a362b99240f67d6
+
+Methodist
+https://www.methodistvisitpay.org/monitoring?authenticationtoken=d6aea892522547c6aa4d4dd4fc26ed16
+https://admin.methodistvisitpay.org/monitoring?authenticationtoken=d6aea892522547c6aa4d4dd4fc26ed16
+
+R1SVIN
+
+",gcattin,,
+45,,Sub-task,Test MTHD Production,dbosley,Must,Done,"Going forward I would like to add the step of doing smoke testing in prod using test accounts.  To be PCI compliant the accounts used would need to be disabled on system go-live.  The trick would be that they would need to be tied to non-existent client data and not produce outbound data.  
+
+Chris, please add a story to Intermountain Alpha backlog for this task.  It will require coordination between Dev, QA, and DQM to enable.  My thought would be to insert test accounts at the BT or APP, process to OB events, but not put into the OB file.  This would most likely require tracking any data/events as associated with a test acct.
+
+For releases and hotfixes, our final step before go-live is a smoke test on each system utilizing these test accounts.
+
+Mark Lythgoe | iVinci Health | CTO | 208.489.8993
+",gcattin,,
+46,,Sub-task,Turn off autosubmit once in production,bini.thomas,Won't,Done,0,gcattin,,
+47,,Sub-task,Schedule Outbound_ScoringAndSegmentation,bini.thomas,Must,Done,0,gcattin,,
+48,,Sub-task,Only Prod: Place outbound file scoring in hold location,bini.thomas,Won't,Done,0,gcattin,,
+49,,Sub-task,Run Script to clear out segmentation and run before Day One ,mrothwell,Must,Done,"Run script from CTI-4117 to  clear out segmentation and run before Day One
+
+This is not needed for SVIN as they don't want the PC segmentations for the initial active inventory.  They just want the new visits going forward from 7/16",ahoobing,,
+50,,Sub-task,-------------------------------->>>>>R1SVIN-Indy Production<<<<<----------------------------------,,Won't,Done,0,gcattin,,
+51,,Sub-task,Request and approve change request to deploy build into R1SVIN Prod,lpenney,Must,Done,"Create a Change Request ticket to approve a release build in Preprod. Note Change Request (for deployments, system changes, etc.) is under https://ivincehealth.sharepoint.com/sites/ivcompliance/_layouts/15/start.aspx#/SitePages/Change%20Requests.aspx
+Then, pass the ticket to Leslie (or his next appointee - MikeS, DanL or Mark) for Approval. When he has approved it, close this subtask.
+
+The Change Request for Production deployment is in the comments.",gcattin,,
+52,,Sub-task,"Create, launch and approve Octopus deployment package for R1SVIN Production",gcattin,Must,Done,"Go to Octopus and create a deployment package for the Prod environment for the desired client. If the prod environment for the given client is not listed, it means that the release package was not deployed to a lower lane first, which likely also means that the gates, likely the DQM or QA gates are not complete.
+
+",gcattin,,
+53,,Sub-task,Perform R1SVIN Prod deployment for VPNG release,gcattin,Must,Done,"Once the approval process is complete, run the deployment process as outlined in the spreadsheet.
+
+..below is the package deployment order we all agreed upon.
+
+ !screenshot-1.png|thumbnail! 
+
+
+There are a couple of guidelines to that IT needs to keep in mind as we do these manual deploys:
+
+1.	Items with the same number can run concurrently, i.e. for items numbered 3, the Multi packages can all be launched together.
+2.	All items in a grouping need to finish before the next starts.  For example all 3 (Multi) packages must be complete before the item 4 (Settings) packages can be launched.
+
+Please let me know if I missed anything or if corrections are needed.
+
+Thanks,
+Leslie
+
+
+Leslie Penney | iVinci Health LLC | Senior Manager, Information Technology
+lpenney@ivincihealth.com | O: 208.343.5035 | M: 208.870.7726",gcattin,,
+54,,Sub-task,Test R1SVIN Production,mthurston,Must,Done,"Going forward I would like to add the step of doing smoke testing in prod using test accounts.  To be PCI compliant the accounts used would need to be disabled on system go-live.  The trick would be that they would need to be tied to non-existent client data and not produce outbound data.  
+
+Chris, please add a story to Intermountain Alpha backlog for this task.  It will require coordination between Dev, QA, and DQM to enable.  My thought would be to insert test accounts at the BT or APP, process to OB events, but not put into the OB file.  This would most likely require tracking any data/events as associated with a test acct.
+
+For releases and hotfixes, our final step before go-live is a smoke test on each system utilizing these test accounts.
+
+Mark Lythgoe | iVinci Health | CTO | 208.489.8993
+",gcattin,,
+55,,Sub-task,--------------------------->>>>>Finalize Release Process<<<<<-----------------------------,,Won't,Done,0,gcattin,,
+56,,Sub-task,Post deployment release manager tasks,gcattin,Must,Done,"For each client, do the following:
+
+1. Mark CRs as Completed and assign deployment date.
+https://ivincehealth.sharepoint.com/sites/ivcompliance/Lists/Change%20Requests/AllItems.aspx
+
+2. Complete release Word file with complete information: select version of VPNG, then update the word file or create one with all the info needed. See other releases for template format:
+https://ivincehealth.sharepoint.com/Products/vpp/VPP%20Change%20Documentation/Forms/AllItems.aspx?RootFolder=%2FProducts%2Fvpp%2FVPP%20Change%20Documentation%2FRelease%20Management%2F4%2Ex%20Releases&View=%7B288342DE%2D4BC8%2D4B5C%2D8A6E%2D898CF98FBCC2%7D
+
+3. Deploy released version to Support.
+
+4. Update VersionsPatchesDatafixes document with current version being released/deployed
+https://ivincehealth.sharepoint.com/Products/vpp/_layouts/15/WopiFrame.aspx?sourcedoc=%7BAFF79A0C-2A0A-4E16-99D1-D95EA3BF9911%7D&file=VersionsPatchesDatafixes.xlsx&action=default
+
+5. Review all the fixVersions associated with this release/deployment and with this client to make sure that all cards are closed, then close the fixVersions by marking it as released with the date of the deployment. (there may be other cards still not closed for other clients.)
+
+6. Deploy released version to Training (if Ryan needs it), and Demo.
+
+7. Turn off user accesses in preprod and prod by deploying the Post Deploy package in each environment. ",gcattin,,
+57,,Sub-task,Turn off tentacles in Production,apalermo,Must,Done,0,gcattin,,
+58,,Sub-task,Tag source branch for Release,nbreaux,Must,To Do,Add a source code release tag to note the point in time of the release.,gcattin,,
+59,,Sub-task,Zip files deployed to production for retention,lpenney,Must,Done,"This is a requirement to save 3 months of production deploy files per our DR policy.  These should be created as files that we can store and archive somewhere in the Azure environment.  The IT department can work with someone to create a suitable location for the files.
+
+Files need to be zipped and placed in an Archive location in Azure. The location is in the VisitPay NoPHI subscription under Storage Account itnophideployarchive\vp-deploy-archive
+This contains files from both the Armor deploy history, and any new files created for Azure deploys.
+",gcattin,,
+60,,Sub-task,Update release log for PCI ,dcook,Must,To Do,"When all is completed, update the release log.
+",gcattin,,
